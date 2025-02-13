@@ -1,9 +1,9 @@
 # XCPlite
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.11)
 
 set(MACOS FALSE) # Build for macOS Darwin ARM
-set(WINDOWS FALSE) # Build for Windows x64
-set(LINUX TRUE) # Build for Linus x64
+set(WINDOWS TRUE) # Build for Windows x64
+set(LINUX FALSE) # Build for Linus x64
 
 set(CMAKE_C_COMPILER "gcc")
 set(CMAKE_CXX_COMPILER "g++")
@@ -22,6 +22,7 @@ set(XCPlite_SOURCES main.c ../src/xcpAppl.c ../src/xcpLite.c ../src/xcpEthTl.c .
 if (WINDOWS)
 
   add_executable(XCPlite ${XCPlite_SOURCES} ${XCPlib_SOURCES})
+  target_link_libraries(XCPlite ws2_32 iphlpapi)
   target_include_directories(XCPlite PUBLIC "${PROJECT_SOURCE_DIR}" )
   target_include_directories(XCPlite PUBLIC "${PROJECT_SOURCE_DIR}/../src" )
   

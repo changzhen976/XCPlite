@@ -9,7 +9,7 @@
 #if defined(_WIN32) || defined(_WIN64)
   #define _WIN
   #if defined(_WIN32) && defined(_WIN64)
-    #undef _WIN32
+    // #undef _WIN32
   #endif
   #if defined(_LINUX) || defined(_LINUX64)|| defined(_LINUX32)
     #error

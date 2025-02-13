@@ -135,9 +135,9 @@ uint8_t* ApplXcpGetPointer(uint8_t addr_ext, uint32_t addr) {
     if (addr_ext != 0) return NULL;
     uint8_t* p;
 
-#ifdef _WIN32 // on WIN32 check that XCP address is in range, because addr is relativ to baseaddr
-    assert((uint64_t)ApplXcpGetBaseAddr() + addr <= 0xffffffff); 
-#endif
+// #ifdef _WIN32 // on WIN32 check that XCP address is in range, because addr is relativ to baseaddr
+//     assert((uint64_t)ApplXcpGetBaseAddr() + addr <= 0xffffffff); 
+// #endif
 
     p = ApplXcpGetBaseAddr() + addr;
 #if OPTION_ENABLE_CAL_SEGMENT
@@ -448,7 +448,7 @@ uint8_t* loadFile(const char* filename, uint32_t* length) {
   fileLen = (uint32_t)GetFileSize(hFile, NULL);
   fileBuf = (uint8_t*)malloc(fileLen + 1);
   if (fileBuf == NULL) {
-    DBG_PRINTF_ERROR("Error: out of memory!\n");
+    DBG_PRINTF_ERROR("Error: %s\n","out of memory!");
     CloseHandle(hFile);
     return NULL;
   }

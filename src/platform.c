@@ -447,7 +447,7 @@ BOOL socketBind(SOCKET sock, uint8_t *addr, uint16_t port) {
     a.sin_port = htons(port);
     if (bind(sock, (SOCKADDR*)&a, sizeof(a)) < 0) {
         if (socketGetLastError() == WSAEADDRINUSE) {
-            DBG_PRINTF_ERROR("ERROR: Port is already in use!\n");
+            DBG_PRINTF_ERROR("ERROR: %s\n", "Port is already in use!");
         }
         else {
             DBG_PRINTF_ERROR("ERROR %d: cannot bind on %u.%u.%u.%u port %u!\n", socketGetLastError(), addr?addr[0]:0, addr?addr[1]:0, addr?addr[2]:0, addr?addr[3]:0, port);
