@@ -257,7 +257,8 @@ typedef struct {
 } tXcpData;
 
 
-static tXcpData gXcp = { 0,0,0 };
+// static tXcpData gXcp = { 0,0,0 };
+static tXcpData gXcp = { 0 };
 
 #define CRM                       (gXcp.Crm)
 #define CRM_LEN                   (gXcp.CrmLen)
@@ -640,7 +641,7 @@ static void XcpStartAllSelectedDaq()
   if (DBG_LEVEL >= 2) {
     char ts[64];
     clockGetString(ts, sizeof(ts), gXcp.DaqStartClock64);
-    printf("DAQ start at t=%s\n", ts);
+    DBG_PRINTF2("DAQ start at t=%s\n", ts);
   }
 #endif
   gXcp.SessionStatus |= SS_DAQ;
@@ -1763,153 +1764,153 @@ static void XcpPrintCmd() {
     switch (CRO_CMD) {
 
     case CC_SET_MTA:
-        printf("SET_MTA addr=%08Xh, addrext=%02Xh\n", CRO_SET_MTA_ADDR, CRO_SET_MTA_EXT);
+        DBG_PRINTF2("SET_MTA addr=%08Xh, addrext=%02Xh\n", CRO_SET_MTA_ADDR, CRO_SET_MTA_EXT);
         break;
 
     case CC_DOWNLOAD:
         {
             uint16_t i;
-            printf("DOWNLOAD size=%u, data=", CRO_DOWNLOAD_SIZE);
+            DBG_PRINTF2("DOWNLOAD size=%u, data=", CRO_DOWNLOAD_SIZE);
             for (i = 0; (i < CRO_DOWNLOAD_SIZE) && (i < CRO_DOWNLOAD_MAX_SIZE); i++) {
-                printf("%02X ", CRO_DOWNLOAD_DATA[i]);
+              DBG_PRINTF2("%02X ", CRO_DOWNLOAD_DATA[i]);
             }
-            printf("\n");
+            DBG_PRINT2("\n");
         }
         break;
 
     case CC_SHORT_DOWNLOAD:
         if (DBG_LEVEL >= 3) {
             uint16_t i;
-            printf("SHORT_DOWNLOAD addr=%08Xh, addrext=%02Xh, size=%u, data=", CRO_SHORT_DOWNLOAD_ADDR, CRO_SHORT_DOWNLOAD_EXT, CRO_SHORT_DOWNLOAD_SIZE);
+            DBG_PRINTF2("SHORT_DOWNLOAD addr=%08Xh, addrext=%02Xh, size=%u, data=", CRO_SHORT_DOWNLOAD_ADDR, CRO_SHORT_DOWNLOAD_EXT, CRO_SHORT_DOWNLOAD_SIZE);
             for (i = 0; (i < CRO_SHORT_DOWNLOAD_SIZE) && (i < CRO_SHORT_DOWNLOAD_MAX_SIZE); i++) {
-                printf("%02X ", CRO_SHORT_DOWNLOAD_DATA[i]);
+              DBG_PRINTF2("%02X ", CRO_SHORT_DOWNLOAD_DATA[i]);
             }
-            printf("\n");
+            DBG_PRINT2("\n");
         }
         break;
 
     case CC_UPLOAD:
         if (DBG_LEVEL >= 3) {
-            printf("UPLOAD size=%u\n", CRO_UPLOAD_SIZE);
+          DBG_PRINTF2("UPLOAD size=%u\n", CRO_UPLOAD_SIZE);
         }
         break;
 
     case CC_SHORT_UPLOAD:
         if (DBG_LEVEL >= 3 || !isDaqRunning()) { // Polling DAQ 
-            printf("SHORT_UPLOAD addr=%08Xh, addrext=%02Xh, size=%u\n", CRO_SHORT_UPLOAD_ADDR, CRO_SHORT_UPLOAD_EXT, CRO_SHORT_UPLOAD_SIZE);
+          DBG_PRINTF2("SHORT_UPLOAD addr=%08Xh, addrext=%02Xh, size=%u\n", CRO_SHORT_UPLOAD_ADDR, CRO_SHORT_UPLOAD_EXT, CRO_SHORT_UPLOAD_SIZE);
         }
         break;
 
 #ifdef XCP_ENABLE_CAL_PAGE
     case CC_SET_CAL_PAGE:
-        printf("SET_CAL_PAGE segment=%u,page =%u,mode=%02Xh\n", CRO_SET_CAL_PAGE_SEGMENT, CRO_SET_CAL_PAGE_PAGE, CRO_SET_CAL_PAGE_MODE);
+        DBG_PRINTF2("SET_CAL_PAGE segment=%u,page =%u,mode=%02Xh\n", CRO_SET_CAL_PAGE_SEGMENT, CRO_SET_CAL_PAGE_PAGE, CRO_SET_CAL_PAGE_MODE);
         break;
 
     case CC_GET_CAL_PAGE:
-        printf("GET_CAL_PAGE segment=%u, mode=%u\n", CRO_GET_CAL_PAGE_SEGMENT, CRO_GET_CAL_PAGE_MODE);
+        DBG_PRINTF2("GET_CAL_PAGE segment=%u, mode=%u\n", CRO_GET_CAL_PAGE_SEGMENT, CRO_GET_CAL_PAGE_MODE);
         break;
 #endif
 
 #ifdef XCP_ENABLE_CHECKSUM
     case CC_BUILD_CHECKSUM: /* Build Checksum */
-        printf("BUILD_CHECKSUM size=%u\n", CRO_BUILD_CHECKSUM_SIZE);
+        DBG_PRINTF2("BUILD_CHECKSUM size=%u\n", CRO_BUILD_CHECKSUM_SIZE);
         break;
 #endif
 
     case CC_SYNCH:
-            printf("SYNCH\n");
+            DBG_PRINT2("SYNCH\n");
             break;
 
     case CC_GET_COMM_MODE_INFO:
-            printf("GET_COMM_MODE_INFO\n");
+            DBG_PRINT2("GET_COMM_MODE_INFO\n");
             break;
 
     case CC_DISCONNECT:
-            printf("DISCONNECT\n");
+            DBG_PRINT2("DISCONNECT\n");
             break;
 
     case CC_GET_ID:
-            printf("GET_ID type=%u\n", CRO_GET_ID_TYPE);
+            DBG_PRINTF2("GET_ID type=%u\n", CRO_GET_ID_TYPE);
             break;
 
     case CC_GET_STATUS:
-            printf("GET_STATUS\n");
+            DBG_PRINT2("GET_STATUS\n");
             break;
 
      case CC_GET_DAQ_PROCESSOR_INFO:
-            printf("GET_DAQ_PROCESSOR_INFO\n");
+            DBG_PRINT2("GET_DAQ_PROCESSOR_INFO\n");
             break;
 
      case CC_GET_DAQ_RESOLUTION_INFO:
-            printf("GET_DAQ_RESOLUTION_INFO\n");
+            DBG_PRINT2("GET_DAQ_RESOLUTION_INFO\n");
             break;
 
      case CC_GET_DAQ_EVENT_INFO:
-            printf("GET_DAQ_EVENT_INFO event=%u\n", CRO_GET_DAQ_EVENT_INFO_EVENT);
+            DBG_PRINTF2("GET_DAQ_EVENT_INFO event=%u\n", CRO_GET_DAQ_EVENT_INFO_EVENT);
             break;
 
      case CC_FREE_DAQ:
-            printf("FREE_DAQ\n");
+            DBG_PRINT2("FREE_DAQ\n");
             break;
 
      case CC_ALLOC_DAQ:
-            printf("ALLOC_DAQ count=%u\n", CRO_ALLOC_DAQ_COUNT);
+            DBG_PRINTF2("ALLOC_DAQ count=%u\n", CRO_ALLOC_DAQ_COUNT);
             break;
 
      case CC_ALLOC_ODT:
-            printf("ALLOC_ODT daq=%u, count=%u\n", CRO_ALLOC_ODT_DAQ, CRO_ALLOC_ODT_COUNT);
+            DBG_PRINTF2("ALLOC_ODT daq=%u, count=%u\n", CRO_ALLOC_ODT_DAQ, CRO_ALLOC_ODT_COUNT);
             break;
 
      case CC_ALLOC_ODT_ENTRY:
             if (DBG_LEVEL >= 3) {
-              printf("ALLOC_ODT_ENTRY daq=%u, odt=%u, count=%u\n", CRO_ALLOC_ODT_ENTRY_DAQ, CRO_ALLOC_ODT_ENTRY_ODT, CRO_ALLOC_ODT_ENTRY_COUNT);
+                DBG_PRINTF2("ALLOC_ODT_ENTRY daq=%u, odt=%u, count=%u\n", CRO_ALLOC_ODT_ENTRY_DAQ, CRO_ALLOC_ODT_ENTRY_ODT, CRO_ALLOC_ODT_ENTRY_COUNT);
             }
             break;
 
      case CC_GET_DAQ_LIST_MODE:
-            printf("GET_DAQ_LIST_MODE daq=%u\n",CRO_GET_DAQ_LIST_MODE_DAQ );
+            DBG_PRINTF2("GET_DAQ_LIST_MODE daq=%u\n",CRO_GET_DAQ_LIST_MODE_DAQ );
             break;
 
      case CC_SET_DAQ_LIST_MODE:
-            printf("SET_DAQ_LIST_MODE daq=%u, mode=%02Xh, eventchannel=%u\n",CRO_SET_DAQ_LIST_MODE_DAQ, CRO_SET_DAQ_LIST_MODE_MODE, CRO_SET_DAQ_LIST_MODE_EVENTCHANNEL);
+            DBG_PRINTF2("SET_DAQ_LIST_MODE daq=%u, mode=%02Xh, eventchannel=%u\n",CRO_SET_DAQ_LIST_MODE_DAQ, CRO_SET_DAQ_LIST_MODE_MODE, CRO_SET_DAQ_LIST_MODE_EVENTCHANNEL);
             break;
 
      case CC_SET_DAQ_PTR:
             if (DBG_LEVEL >= 3) {
-                printf("SET_DAQ_PTR daq=%u,odt=%u,idx=%u\n", CRO_SET_DAQ_PTR_DAQ, CRO_SET_DAQ_PTR_ODT, CRO_SET_DAQ_PTR_IDX);
+                DBG_PRINTF2("SET_DAQ_PTR daq=%u,odt=%u,idx=%u\n", CRO_SET_DAQ_PTR_DAQ, CRO_SET_DAQ_PTR_ODT, CRO_SET_DAQ_PTR_IDX);
             }
             break;
 
      case CC_WRITE_DAQ:
-            printf("WRITE_DAQ size=%u,addr=%08Xh,%02Xh\n", CRO_WRITE_DAQ_SIZE, CRO_WRITE_DAQ_ADDR, CRO_WRITE_DAQ_EXT);
+            DBG_PRINTF2("WRITE_DAQ size=%u,addr=%08Xh,%02Xh\n", CRO_WRITE_DAQ_SIZE, CRO_WRITE_DAQ_ADDR, CRO_WRITE_DAQ_EXT);
             break;
 
      case CC_WRITE_DAQ_MULTIPLE:
          if (DBG_LEVEL >= 3) {
-             printf("WRITE_DAQ_MULTIPLE count=%u\n", CRO_WRITE_DAQ_MULTIPLE_NODAQ);
+            DBG_PRINTF2("WRITE_DAQ_MULTIPLE count=%u\n", CRO_WRITE_DAQ_MULTIPLE_NODAQ);
              for (int i = 0; i < CRO_WRITE_DAQ_MULTIPLE_NODAQ; i++) {
-                 printf("   %u: size=%u,addr=%08Xh,%02Xh\n", i, CRO_WRITE_DAQ_MULTIPLE_SIZE(i), CRO_WRITE_DAQ_MULTIPLE_ADDR(i), CRO_WRITE_DAQ_MULTIPLE_EXT(i));
+                DBG_PRINTF2("   %u: size=%u,addr=%08Xh,%02Xh\n", i, CRO_WRITE_DAQ_MULTIPLE_SIZE(i), CRO_WRITE_DAQ_MULTIPLE_ADDR(i), CRO_WRITE_DAQ_MULTIPLE_EXT(i));
              }
          }
          break;
 
      case CC_START_STOP_DAQ_LIST:
-            printf("START_STOP mode=%s, daq=%u\n", (CRO_START_STOP_DAQ_LIST_MODE == 2)?"select": (CRO_START_STOP_DAQ_LIST_MODE == 1)?"start":"stop", CRO_START_STOP_DAQ_LIST_DAQ);
+            DBG_PRINTF2("START_STOP mode=%s, daq=%u\n", (CRO_START_STOP_DAQ_LIST_MODE == 2)?"select": (CRO_START_STOP_DAQ_LIST_MODE == 1)?"start":"stop", CRO_START_STOP_DAQ_LIST_DAQ);
             break;
 
      case CC_START_STOP_SYNCH:
-            printf("CC_START_STOP_SYNCH mode=%s\n", (CRO_START_STOP_SYNCH_MODE == 3) ? "prepare" : (CRO_START_STOP_SYNCH_MODE == 2) ? "stop_selected" : (CRO_START_STOP_SYNCH_MODE == 1) ? "start_selected" : "stop_all");
+            DBG_PRINTF2("CC_START_STOP_SYNCH mode=%s\n", (CRO_START_STOP_SYNCH_MODE == 3) ? "prepare" : (CRO_START_STOP_SYNCH_MODE == 2) ? "stop_selected" : (CRO_START_STOP_SYNCH_MODE == 1) ? "start_selected" : "stop_all");
             break;
 
      case CC_GET_DAQ_CLOCK:
             if (DBG_LEVEL >= 3 || !isDaqRunning()) {
-              printf("GET_DAQ_CLOCK\n");
+              DBG_PRINT2("GET_DAQ_CLOCK\n");
             }
             break;
 
 #if XCP_PROTOCOL_LAYER_VERSION >= 0x0103
      case CC_TIME_CORRELATION_PROPERTIES:
-         printf("GET_TIME_CORRELATION_PROPERTIES set=%02Xh, request=%u, clusterId=%u\n", CRO_TIME_SYNCH_PROPERTIES_SET_PROPERTIES, CRO_TIME_SYNCH_PROPERTIES_GET_PROPERTIES_REQUEST, CRO_TIME_SYNCH_PROPERTIES_CLUSTER_ID );
+          DBG_PRINTF2("GET_TIME_CORRELATION_PROPERTIES set=%02Xh, request=%u, clusterId=%u\n", CRO_TIME_SYNCH_PROPERTIES_SET_PROPERTIES, CRO_TIME_SYNCH_PROPERTIES_GET_PROPERTIES_REQUEST, CRO_TIME_SYNCH_PROPERTIES_CLUSTER_ID );
          break;
 #endif
 
@@ -1917,18 +1918,18 @@ static void XcpPrintCmd() {
      case CC_LEVEL_1_COMMAND:
          switch (CRO_LEVEL_1_COMMAND_CODE) {
            case CC_GET_VERSION:
-               printf("GET_VERSION\n");
+               DBG_PRINT2("GET_VERSION\n");
                break;
 #ifdef XCP_ENABLE_PACKED_MODE
            case CC_GET_DAQ_LIST_PACKED_MODE:
-               printf("GET_DAQ_LIST_PACKED_MODE daq=%u\n", CRO_GET_DAQ_LIST_PACKED_MODE_DAQ);
+               DBG_PRINTF2("GET_DAQ_LIST_PACKED_MODE daq=%u\n", CRO_GET_DAQ_LIST_PACKED_MODE_DAQ);
                break;
            case CC_SET_DAQ_LIST_PACKED_MODE:
-               printf("SET_DAQ_LIST_PACKED_MODE daq=%u, sampleCount=%u\n", CRO_SET_DAQ_LIST_PACKED_MODE_DAQ,CRO_SET_DAQ_LIST_PACKED_MODE_SAMPLECOUNT);
+               DBG_PRINTF2("SET_DAQ_LIST_PACKED_MODE daq=%u, sampleCount=%u\n", CRO_SET_DAQ_LIST_PACKED_MODE_DAQ,CRO_SET_DAQ_LIST_PACKED_MODE_SAMPLECOUNT);
                break;
 #endif
            default:
-               printf("UNKNOWN LEVEL 1 COMMAND %02X\n", CRO_LEVEL_1_COMMAND_CODE);
+              DBG_PRINTF2("UNKNOWN LEVEL 1 COMMAND %02X\n", CRO_LEVEL_1_COMMAND_CODE);
                break;
          }
          break;
@@ -1939,12 +1940,12 @@ static void XcpPrintCmd() {
 #if XCP_PROTOCOL_LAYER_VERSION >= 0x0103             
            case CC_TL_GET_DAQ_CLOCK_MULTICAST:
                if (DBG_LEVEL >= 3 || !isDaqRunning()) {
-                   printf("GET_DAQ_CLOCK_MULTICAST counter=%u, cluster=%u\n", CRO_GET_DAQ_CLOCK_MCAST_COUNTER, CRO_GET_DAQ_CLOCK_MCAST_CLUSTER_IDENTIFIER);
+                  DBG_PRINTF2("GET_DAQ_CLOCK_MULTICAST counter=%u, cluster=%u\n", CRO_GET_DAQ_CLOCK_MCAST_COUNTER, CRO_GET_DAQ_CLOCK_MCAST_CLUSTER_IDENTIFIER);
                }
              break;
            case CC_TL_GET_SERVER_ID_EXTENDED:
            case CC_TL_GET_SERVER_ID:
-             printf("GET_SERVER_ID %u:%u:%u:%u:%u\n", CRO_TL_GET_SERVER_ID_ADDR(0), CRO_TL_GET_SERVER_ID_ADDR(1), CRO_TL_GET_SERVER_ID_ADDR(2), CRO_TL_GET_SERVER_ID_ADDR(3), CRO_TL_GET_SERVER_ID_PORT );
+              DBG_PRINTF2("GET_SERVER_ID %u:%u:%u:%u:%u\n", CRO_TL_GET_SERVER_ID_ADDR(0), CRO_TL_GET_SERVER_ID_ADDR(1), CRO_TL_GET_SERVER_ID_ADDR(2), CRO_TL_GET_SERVER_ID_ADDR(3), CRO_TL_GET_SERVER_ID_PORT );
              break;
 #endif
          }
@@ -1957,7 +1958,7 @@ static void XcpPrintCmd() {
 static void XcpPrintRes() {
     
     if (CRM_CMD == PID_EV && CRM_EVENTCODE != EVC_TIME_SYNCH) {
-        printf("<- EVENT: %02Xh\n", CRM_BYTE(1));
+        DBG_PRINTF2("<- EVENT: %02Xh\n", CRM_BYTE(1));
     }
     else if (CRM_CMD == PID_ERR) {
                 const char* e;
@@ -1985,95 +1986,95 @@ static void XcpPrintRes() {
                 case  CRC_TIMECORR_STATE_CHANGE: e = "CRC_TIMECORR_STATE_CHANGE"; break;
                 default: e = "Unknown errorcode";
         }
-        printf("<- ERROR: %02Xh - %s\n", CRM_ERR, e );
+        DBG_PRINTF2("<- ERROR: %02Xh - %s\n", CRM_ERR, e );
     }
     else {
         switch (CRO_CMD) {
 
         case CC_CONNECT:
-            printf("<- version=%02Xh/%02Xh, maxcro=%u, maxdto=%u, resource=%02X, mode=%u\n",
+            DBG_PRINTF2("<- version=%02Xh/%02Xh, maxcro=%u, maxdto=%u, resource=%02X, mode=%u\n",
                 CRM_CONNECT_PROTOCOL_VERSION, CRM_CONNECT_TRANSPORT_VERSION, CRM_CONNECT_MAX_CTO_SIZE, CRM_CONNECT_MAX_DTO_SIZE, CRM_CONNECT_RESOURCE,  CRM_CONNECT_COMM_BASIC);
             break;
 
         case CC_GET_COMM_MODE_INFO:
-            printf("<- version=%02Xh, opt=%u, queue=%u, max_bs=%u, min_st=%u\n",
+            DBG_PRINTF2("<- version=%02Xh, opt=%u, queue=%u, max_bs=%u, min_st=%u\n",
                 CRM_GET_COMM_MODE_INFO_DRIVER_VERSION, CRM_GET_COMM_MODE_INFO_COMM_OPTIONAL, CRM_GET_COMM_MODE_INFO_QUEUE_SIZE, CRM_GET_COMM_MODE_INFO_MAX_BS, CRM_GET_COMM_MODE_INFO_MIN_ST);
             break;
 
         case CC_GET_STATUS:
-            printf("<- sessionstatus=%02Xh, protectionstatus=%02Xh\n", CRM_GET_STATUS_STATUS, CRM_GET_STATUS_PROTECTION);
+            DBG_PRINTF2("<- sessionstatus=%02Xh, protectionstatus=%02Xh\n", CRM_GET_STATUS_STATUS, CRM_GET_STATUS_PROTECTION);
             break;
 
         case CC_GET_ID:
-            printf("<- mode=%u,len=%u\n", CRM_GET_ID_MODE, CRM_GET_ID_LENGTH);
+            DBG_PRINTF2("<- mode=%u,len=%u\n", CRM_GET_ID_MODE, CRM_GET_ID_LENGTH);
             break;
 
         case CC_UPLOAD:
             if (DBG_LEVEL >= 4) {
-                printf("<- data=");
+                DBG_PRINT2("<- data=");
                 for (int i = 0; i < CRO_UPLOAD_SIZE; i++) {
-                    printf("%02Xh ", CRM_UPLOAD_DATA[i]);
+                    DBG_PRINTF2("%02Xh ", CRM_UPLOAD_DATA[i]);
                 }
-                printf("\n");
+                DBG_PRINT2("\n");
             }
             break;
 
         case CC_SHORT_UPLOAD:
             if (DBG_LEVEL >= 4) {
-                printf("<- data=");
+                DBG_PRINT2("<- data=");
                 for (int i = 0; i < (uint16_t)CRO_SHORT_UPLOAD_SIZE; i++) {
-                    printf("%02Xh ", CRM_SHORT_UPLOAD_DATA[i]);
+                  DBG_PRINTF2("%02Xh ", CRM_SHORT_UPLOAD_DATA[i]);
                 }
-                printf("\n");
+                DBG_PRINT2("\n");
             }
             break;
 
 #ifdef XCP_ENABLE_CAL_PAGE
         case CC_GET_CAL_PAGE:
-            printf("<- page=%u\n", CRM_GET_CAL_PAGE_PAGE);
+            DBG_PRINTF2("<- page=%u\n", CRM_GET_CAL_PAGE_PAGE);
             break;
 #endif
 
 #ifdef XCP_ENABLE_CHECKSUM
         case CC_BUILD_CHECKSUM:
-            printf("<- sum=%08Xh\n", CRM_BUILD_CHECKSUM_RESULT);
+            DBG_PRINTF2("<- sum=%08Xh\n", CRM_BUILD_CHECKSUM_RESULT);
             break;
 #endif
 
         case CC_GET_DAQ_RESOLUTION_INFO:
-            printf("<- mode=%02Xh, , ticks=%02Xh\n", CRM_GET_DAQ_RESOLUTION_INFO_TIMESTAMP_MODE, CRM_GET_DAQ_RESOLUTION_INFO_TIMESTAMP_TICKS);
+            DBG_PRINTF2("<- mode=%02Xh, , ticks=%02Xh\n", CRM_GET_DAQ_RESOLUTION_INFO_TIMESTAMP_MODE, CRM_GET_DAQ_RESOLUTION_INFO_TIMESTAMP_TICKS);
             break;
 
         case CC_GET_DAQ_PROCESSOR_INFO:
-            printf("<- min=%u, max=%u, events=%u, keybyte=%02Xh, properties=%02Xh\n", CRM_GET_DAQ_PROCESSOR_INFO_MIN_DAQ, CRM_GET_DAQ_PROCESSOR_INFO_MAX_DAQ, CRM_GET_DAQ_PROCESSOR_INFO_MAX_EVENT, CRM_GET_DAQ_PROCESSOR_INFO_DAQ_KEY_BYTE, CRM_GET_DAQ_PROCESSOR_INFO_PROPERTIES);
+            DBG_PRINTF2("<- min=%u, max=%u, events=%u, keybyte=%02Xh, properties=%02Xh\n", CRM_GET_DAQ_PROCESSOR_INFO_MIN_DAQ, CRM_GET_DAQ_PROCESSOR_INFO_MAX_DAQ, CRM_GET_DAQ_PROCESSOR_INFO_MAX_EVENT, CRM_GET_DAQ_PROCESSOR_INFO_DAQ_KEY_BYTE, CRM_GET_DAQ_PROCESSOR_INFO_PROPERTIES);
             break;
 
         case CC_GET_DAQ_EVENT_INFO:
-            printf("<- 0xFF properties=%02Xh, unit=%u, cycle=%u\n", CRM_GET_DAQ_EVENT_INFO_PROPERTIES, CRM_GET_DAQ_EVENT_INFO_TIME_UNIT, CRM_GET_DAQ_EVENT_INFO_TIME_CYCLE);
+            DBG_PRINTF2("<- 0xFF properties=%02Xh, unit=%u, cycle=%u\n", CRM_GET_DAQ_EVENT_INFO_PROPERTIES, CRM_GET_DAQ_EVENT_INFO_TIME_UNIT, CRM_GET_DAQ_EVENT_INFO_TIME_CYCLE);
             break;
 
 #if XCP_PROTOCOL_LAYER_VERSION >= 0x0103
         case CC_GET_DAQ_CLOCK:
             if (DBG_LEVEL >= 3 || !isDaqRunning()) {
                 if (isLegacyMode()) {
-                    printf("<- L t=0x%" PRIx32 "\n", CRM_GET_DAQ_CLOCK_TIME);
+                    DBG_PRINTF2("<- L t=0x%" PRIx32 "\n", CRM_GET_DAQ_CLOCK_TIME);
                 }
                 else {
                     if (CRM_GET_DAQ_CLOCK_PAYLOAD_FMT == DAQ_CLOCK_PAYLOAD_FMT_SLV_32) {
-                        printf("<- X t=0x%" PRIx32 " sync=%u\n", CRM_GET_DAQ_CLOCK_TIME, CRM_GET_DAQ_CLOCK_SYNCH_STATE);
+                        DBG_PRINTF2("<- X t=0x%" PRIx32 " sync=%u\n", CRM_GET_DAQ_CLOCK_TIME, CRM_GET_DAQ_CLOCK_SYNCH_STATE);
                     }
                     else {
                         char ts[64];
                         uint64_t t = (((uint64_t)CRM_GET_DAQ_CLOCK_TIME64_HIGH) << 32) | CRM_GET_DAQ_CLOCK_TIME64_LOW;
                         clockGetString(ts, sizeof(ts), t);
-                        printf("<- X t=%" PRIu64 " (%s), sync=%u\n", t&0xFFFFFFFF, ts, CRM_GET_DAQ_CLOCK_SYNCH_STATE64);
+                        DBG_PRINTF2("<- X t=%" PRIu64 " (%s), sync=%u\n", t&0xFFFFFFFF, ts, CRM_GET_DAQ_CLOCK_SYNCH_STATE64);
                     }
                 }
             }
             break;
 
         case CC_TIME_CORRELATION_PROPERTIES:
-            printf("<- config=%02Xh, clocks=%02Xh, state=%02Xh, info=%02Xh, clusterId=%u\n",
+            DBG_PRINTF2("<- config=%02Xh, clocks=%02Xh, state=%02Xh, info=%02Xh, clusterId=%u\n",
                 CRM_TIME_SYNCH_PROPERTIES_SERVER_CONFIG, CRM_TIME_SYNCH_PROPERTIES_OBSERVABLE_CLOCKS, CRM_TIME_SYNCH_PROPERTIES_SYNCH_STATE, CRM_TIME_SYNCH_PROPERTIES_CLOCK_INFO, CRM_TIME_SYNCH_PROPERTIES_CLUSTER_ID );
             break;
 #endif // >= 0x0103
@@ -2083,7 +2084,7 @@ static void XcpPrintRes() {
             switch (CRO_LEVEL_1_COMMAND_CODE) {
 
             case CC_GET_VERSION:
-                printf("<- protocol layer version: major=%02Xh/minor=%02Xh, transport layer version: major=%02Xh/minor=%02Xh\n",
+                DBG_PRINTF2("<- protocol layer version: major=%02Xh/minor=%02Xh, transport layer version: major=%02Xh/minor=%02Xh\n",
                     CRM_GET_VERSION_PROTOCOL_VERSION_MAJOR,
                     CRM_GET_VERSION_PROTOCOL_VERSION_MINOR,
                     CRM_GET_VERSION_TRANSPORT_VERSION_MAJOR,
@@ -2092,7 +2093,7 @@ static void XcpPrintRes() {
 
 #ifdef XCP_ENABLE_PACKED_MODE
             case CC_GET_DAQ_LIST_PACKED_MODE:
-                printf("<- mode = %u\n", CRM_GET_DAQ_LIST_PACKED_MODE_MODE);
+                DBG_PRINTF2("<- mode = %u\n", CRM_GET_DAQ_LIST_PACKED_MODE_MODE);
                 break;
 #endif
             }
@@ -2105,27 +2106,27 @@ static void XcpPrintRes() {
             case CC_TL_GET_DAQ_CLOCK_MULTICAST:
                 if (DBG_LEVEL >= 3 || !isDaqRunning()) {
                     if (isLegacyMode()) {
-                        printf("<- L t=0x%" PRIx32 "\n", CRM_GET_DAQ_CLOCK_MCAST_TIME);
+                        DBG_PRINTF2("<- L t=0x%" PRIx32 "\n", CRM_GET_DAQ_CLOCK_MCAST_TIME);
                     }
                     else {
                         if ((CRM_GET_DAQ_CLOCK_MCAST_PAYLOAD_FMT & ~DAQ_CLOCK_PAYLOAD_FMT_ID) == DAQ_CLOCK_PAYLOAD_FMT_SLV_32) {
-                            printf("<- X t=0x%" PRIx32 " sync=%u", CRM_GET_DAQ_CLOCK_MCAST_TIME, CRM_GET_DAQ_CLOCK_MCAST_SYNCH_STATE);
-                            if (CRM_GET_DAQ_CLOCK_MCAST_PAYLOAD_FMT & DAQ_CLOCK_PAYLOAD_FMT_ID) printf(" counter=%u, cluster=%u", CRM_GET_DAQ_CLOCK_MCAST_COUNTER, CRM_GET_DAQ_CLOCK_MCAST_CLUSTER_IDENTIFIER);
+                            DBG_PRINTF2("<- X t=0x%" PRIx32 " sync=%u", CRM_GET_DAQ_CLOCK_MCAST_TIME, CRM_GET_DAQ_CLOCK_MCAST_SYNCH_STATE);
+                            if (CRM_GET_DAQ_CLOCK_MCAST_PAYLOAD_FMT & DAQ_CLOCK_PAYLOAD_FMT_ID) DBG_PRINTF2(" counter=%u, cluster=%u", CRM_GET_DAQ_CLOCK_MCAST_COUNTER, CRM_GET_DAQ_CLOCK_MCAST_CLUSTER_IDENTIFIER);
                         }
                         else {
                             char ts[64];
                             clockGetString(ts, sizeof(ts), (((uint64_t)CRM_GET_DAQ_CLOCK_MCAST_TIME64_HIGH)<<32)|CRM_GET_DAQ_CLOCK_MCAST_TIME64_LOW);
-                            printf("<- X t=%s, sync=%u", ts, CRM_GET_DAQ_CLOCK_MCAST_SYNCH_STATE64);
-                            if (CRM_GET_DAQ_CLOCK_MCAST_PAYLOAD_FMT & DAQ_CLOCK_PAYLOAD_FMT_ID) printf(" counter=%u, cluster=%u", CRM_GET_DAQ_CLOCK_MCAST_COUNTER64, CRM_GET_DAQ_CLOCK_MCAST_CLUSTER_IDENTIFIER64);
+                            DBG_PRINTF2("<- X t=%s, sync=%u", ts, CRM_GET_DAQ_CLOCK_MCAST_SYNCH_STATE64);
+                            if (CRM_GET_DAQ_CLOCK_MCAST_PAYLOAD_FMT & DAQ_CLOCK_PAYLOAD_FMT_ID) DBG_PRINTF2(" counter=%u, cluster=%u", CRM_GET_DAQ_CLOCK_MCAST_COUNTER64, CRM_GET_DAQ_CLOCK_MCAST_CLUSTER_IDENTIFIER64);
                         }
-                        printf("\n");
+                        DBG_PRINT2("\n");
                     }
                 }
 
                 break;
 
             case CC_TL_GET_SERVER_ID:
-              printf("<- %u.%u.%u.%u:%u %s\n",
+                DBG_PRINTF2("<- %u.%u.%u.%u:%u %s\n",
                 CRM_TL_GET_SERVER_ID_ADDR(0), CRM_TL_GET_SERVER_ID_ADDR(1), CRM_TL_GET_SERVER_ID_ADDR(2), CRM_TL_GET_SERVER_ID_ADDR(3), CRM_TL_GET_SERVER_ID_PORT, &CRM_TL_GET_SERVER_ID_ID);
               break;
 #endif
@@ -2134,7 +2135,7 @@ static void XcpPrintRes() {
 
         default:
             if (DBG_LEVEL >= 3) {
-                printf("<- OK\n");
+                DBG_PRINT2("<- OK\n");
             }
             break;
 
@@ -2149,20 +2150,20 @@ static void XcpPrintDaqList( uint16_t daq )
 
   if (daq>=gXcp.Daq.DaqCount) return;
 
-  printf("DAQ %u:\n",daq);
-  printf(" eventchannel=%04Xh,",DaqListEventChannel(daq));
-  printf(" firstOdt=%u,",DaqListFirstOdt(daq));
-  printf(" lastOdt=%u,",DaqListLastOdt(daq));
-  printf(" mode=%02Xh,", DaqListMode(daq));
-  printf(" state=%02Xh,", DaqListState(daq));
+  DBG_PRINTF2("DAQ %u:\n",daq);
+  DBG_PRINTF2(" eventchannel=%04Xh,",DaqListEventChannel(daq));
+  DBG_PRINTF2(" firstOdt=%u,",DaqListFirstOdt(daq));
+  DBG_PRINTF2(" lastOdt=%u,",DaqListLastOdt(daq));
+  DBG_PRINTF2(" mode=%02Xh,", DaqListMode(daq));
+  DBG_PRINTF2(" state=%02Xh,", DaqListState(daq));
 #ifdef XCP_ENABLE_PACKED_MODE
-  printf(" sampleCount=%u\n",DaqListSampleCount(daq));
+  DBG_PRINTF2(" sampleCount=%u\n",DaqListSampleCount(daq));
 #endif
   for (i=DaqListFirstOdt(daq);i<=DaqListLastOdt(daq);i++) {
-    printf("  ODT %u (%u):",i-DaqListFirstOdt(daq),i);
-    printf(" firstOdtEntry=%u, lastOdtEntry=%u, size=%u:\n", DaqListOdtFirstEntry(i), DaqListOdtLastEntry(i),DaqListOdtSize(i));
+    DBG_PRINTF2("  ODT %u (%u):",i-DaqListFirstOdt(daq),i);
+    DBG_PRINTF2(" firstOdtEntry=%u, lastOdtEntry=%u, size=%u:\n", DaqListOdtFirstEntry(i), DaqListOdtLastEntry(i),DaqListOdtSize(i));
     for (e=DaqListOdtFirstEntry(i);e<=DaqListOdtLastEntry(i);e++) {
-      printf("   %08X,%u\n",OdtEntryAddr(e), OdtEntrySize(e));
+      DBG_PRINTF2("   %08X,%u\n",OdtEntryAddr(e), OdtEntrySize(e));
     }
   } /* j */
 }

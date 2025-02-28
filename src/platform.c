@@ -14,7 +14,6 @@
 |   Code released into public domain, no attribution required
  ----------------------------------------------------------------------------*/
 
-#include "main.h"
 #include "platform.h"
 #include "dbg_print.h"
 
@@ -66,6 +65,19 @@ int _kbhit() {
   return 0;
 }
 
+
+#endif
+
+#ifdef ESP_PLATFORM
+
+int _getch() {
+    return 0;
+}
+  
+int _kbhit() {
+
+    return 0;
+}
 
 #endif
 
@@ -138,7 +150,20 @@ void sleepMs(uint32_t ms) {
     Sleep(ms);
 }
 
+#elif defined(ESP_PLATFORM) 
 
+void sleepNs(uint32_t ns) {
+    if (ns < 1000000){
+        vTaskDelay(1 / portTICK_PERIOD_MS);
+    }else{
+        vTaskDelay( ( ns / 1000000 ) / portTICK_PERIOD_MS);
+    }
+    
+}
+
+void sleepMs(uint32_t ms) {
+    vTaskDelay(ms / portTICK_PERIOD_MS);
+}
 
 #endif // Windows
 
@@ -147,7 +172,7 @@ void sleepMs(uint32_t ms) {
 // Mutex
 /**************************************************************************/
 
-#if defined(_LINUX)
+#if defined(_LINUX) || defined(ESP_PLATFORM)
 
 void mutexInit(MUTEX* m, int recursive, uint32_t spinCount) {
     (void)spinCount;
@@ -188,7 +213,7 @@ void mutexDestroy(MUTEX* m) {
 /**************************************************************************/
 
 
-#ifdef _LINUX
+#if defined(_LINUX) || defined(ESP_PLATFORM)
 
 int socketStartup() {
 
@@ -252,7 +277,7 @@ int socketClose(SOCKET *sp) {
     return 1;
 }
 
-
+#ifndef ESP_PLATFORM // linux system
 #ifndef __APPLE__
 #include <linux/if_packet.h>
 #else
@@ -333,7 +358,24 @@ BOOL socketGetLocalAddr(uint8_t* mac, uint8_t* addr) {
     }
 }
 
+#else // ESP32
 
+// NEED REWRITE!!!!!
+BOOL socketGetLocalAddr(uint8_t* mac, uint8_t* addr) {
+    static uint32_t addr1 = 0;
+    static uint8_t mac1[6] = { 0,0,0,0,0,0 };
+    
+    if (addr1 != 0) {
+        if (mac) memcpy(mac, mac1, 6);
+        if (addr) memcpy(addr, &addr1, 4);
+        return TRUE;
+    } 
+    else {
+        return FALSE;
+    }
+}
+
+#endif
 
 
 #endif // _LINUX
@@ -626,7 +668,7 @@ int16_t socketSendTo(SOCKET sock, const uint8_t* buffer, uint16_t size, const ui
     sa.sin_family = AF_INET;
 #if defined(_WIN) // Windows
     memcpy(&sa.sin_addr.S_un.S_addr, addr, 4);
-#elif defined(_LINUX) // Linux
+#elif defined(_LINUX) || defined(ESP_PLATFORM) // Linux ESP32
     memcpy(&sa.sin_addr.s_addr, addr, 4);
 #else
 #error
@@ -657,7 +699,7 @@ uint64_t clockGetLast() {
   return sClock;
 }
 
-#if defined(_LINUX) // Linux
+#if defined(_LINUX) || defined(ESP_PLATFORM) // Linux
 
 /*
 Linux clock type

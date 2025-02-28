@@ -14,6 +14,10 @@
   #if defined(_LINUX) || defined(_LINUX64)|| defined(_LINUX32)
     #error
   #endif
+#elif defined(ESP_PLATFORM)
+
+// do nothing
+
 #else
   #define _LINUX
   #if defined (_ix64_) || defined (__x86_64__) || defined (__aarch64__)
@@ -60,7 +64,9 @@
 #include <sys/stat.h>
 #include <pthread.h>
 
+#ifndef ESP_PLATFORM
 #include <ifaddrs.h>
+#endif
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>

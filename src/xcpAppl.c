@@ -245,7 +245,7 @@ uint32_t ApplXcpGetAddr(uint8_t* p)
 
 
 
-#ifdef _LINUX32
+#if defined(LINUX32)  || defined(ESP_PLATFORM)
 
 uint8_t* ApplXcpGetBaseAddr()
 {

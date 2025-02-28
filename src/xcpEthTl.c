@@ -848,7 +848,7 @@ BOOL XcpTlWaitForTransmitData(uint32_t timeout_ms) {
       return TRUE;
     }
     return FALSE;
-#elif defined(_LINUX) // Linux
+#elif defined(_LINUX)|| defined(ESP_PLATFORM) // Linux
     // Use polling for Linux
     #define XCPTL_QUEUE_TRANSMIT_POLLING_TIME_MS 1
     uint32_t t = 0;

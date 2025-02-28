@@ -14,6 +14,8 @@
 extern unsigned int gDebugLevel;
 #define DBG_LEVEL gDebugLevel
 
+#ifndef ESP_PLATFORM
+
 #define DBG_PRINTF_ERROR(format, ...) printf(format, __VA_ARGS__)
 #define DBG_PRINTF(level, format, ...) if (DBG_LEVEL>=level) printf(format, __VA_ARGS__)
 #define DBG_PRINTF1(format, ...) if (DBG_LEVEL>=1) printf(format, __VA_ARGS__)
@@ -27,6 +29,29 @@ extern unsigned int gDebugLevel;
 #define DBG_PRINT2(format) if (DBG_LEVEL>=2) printf(format)
 #define DBG_PRINT3(format) if (DBG_LEVEL>=3) printf(format)
 #define DBG_PRINT4(format) if (DBG_LEVEL>=4) printf(format)
+
+#else
+
+#include "esp_mac.h"
+#include "esp_rom_sys.h"
+// #include "esp_rom_printf.h"
+
+#define DBG_PRINTF_ERROR(format, ...) esp_rom_printf(format, __VA_ARGS__)
+#define DBG_PRINTF(level, format, ...) if (DBG_LEVEL>=level) esp_rom_printf(format, __VA_ARGS__)
+#define DBG_PRINTF1(format, ...) if (DBG_LEVEL>=1) esp_rom_printf(format, __VA_ARGS__)
+#define DBG_PRINTF2(format, ...) if (DBG_LEVEL>=2) esp_rom_printf(format, __VA_ARGS__)
+#define DBG_PRINTF3(format, ...) if (DBG_LEVEL>=3) esp_rom_printf(format, __VA_ARGS__)
+#define DBG_PRINTF4(format, ...) if (DBG_LEVEL>=4) esp_rom_printf(format, __VA_ARGS__)
+
+#define DBG_PRINT_ERROR(format) esp_rom_printf(format)
+#define DBG_PRINT(level, format) if (DBG_LEVEL>=level) esp_rom_printf(format)
+#define DBG_PRINT1(format) if (DBG_LEVEL>=1) esp_rom_printf(format)
+#define DBG_PRINT2(format) if (DBG_LEVEL>=2) esp_rom_printf(format)
+#define DBG_PRINT3(format) if (DBG_LEVEL>=3) esp_rom_printf(format)
+#define DBG_PRINT4(format) if (DBG_LEVEL>=4) esp_rom_printf(format)
+
+
+#endif
 
 #else
 

@@ -21,12 +21,12 @@
 
 #if defined(_WIN) // Windows
 static DWORD WINAPI XcpServerReceiveThread(LPVOID lpParameter);
-#elif defined(_LINUX) // Linux
+#elif defined(_LINUX) || defined(ESP_PLATFORM)// Linux
 static void* XcpServerReceiveThread(void* par);
 #endif
 #if defined(_WIN) // Windows
 static DWORD WINAPI XcpServerTransmitThread(LPVOID lpParameter);
-#elif defined(_LINUX) // Linux
+#elif defined(_LINUX)  || defined(ESP_PLATFORM)// Linux
 static void* XcpServerTransmitThread(void* par);
 #endif
 
@@ -118,7 +118,7 @@ BOOL XcpEthServerShutdown() {
 // XCP server unicast command receive thread
 #if defined(_WIN) // Windows
 DWORD WINAPI XcpServerReceiveThread(LPVOID par)
-#elif defined(_LINUX) // Linux
+#elif defined(_LINUX) || defined(ESP_PLATFORM) // Linux
 extern void* XcpServerReceiveThread(void* par)
 #endif
 {
@@ -143,7 +143,7 @@ extern void* XcpServerReceiveThread(void* par)
 // XCP server transmit thread
 #if defined(_WIN) // Windows
 DWORD WINAPI XcpServerTransmitThread(LPVOID par)
-#elif defined(_LINUX) // Linux
+#elif defined(_LINUX) || defined(ESP_PLATFORM) // Linux
 extern void* XcpServerTransmitThread(void* par)
 #endif
 {

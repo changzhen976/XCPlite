@@ -3,8 +3,8 @@
 /*
 | Code released into public domain, no attribution required
 */
-
-
+#include "main.h"
+#include <time.h>
 //-------------------------------------------------------------------------------
 // Keyboard
 
@@ -24,7 +24,9 @@ extern int _kbhit();
 #if defined(_WIN) // Windows
 #define SPRINTF(dest,format,...) sprintf_s((char*)dest,sizeof(dest),format,__VA_ARGS__)
 #define SNPRINTF(dest,len,format,...) sprintf_s((char*)dest,len,format,__VA_ARGS__)
-#elif defined(_LINUX) // Linux
+
+#elif defined(_LINUX) ||  defined(ESP_PLATFORM) //ESP32 Linux
+
 #define SPRINTF(dest,format,...) snprintf((char*)dest,sizeof(dest),format,__VA_ARGS__)
 #define SNPRINTF(dest,len,format,...) snprintf((char*)dest,len,format,__VA_ARGS__)
 #endif
@@ -50,7 +52,7 @@ extern void sleepMs(uint32_t ms);
 #define mutexLock EnterCriticalSection
 #define mutexUnlock LeaveCriticalSection
 
-#elif defined(_LINUX) // Linux
+#elif defined(_LINUX)|| defined(ESP_PLATFORM) // Linux ESP32
 
 #define MUTEX pthread_mutex_t
 #define MUTEX_INTIALIZER PTHREAD_MUTEX_INITIALIZER
@@ -74,7 +76,7 @@ typedef HANDLE tXcpThread;
 #define terminate_thread(h) { TerminateThread(h,0); WaitForSingleObject(h,1000); CloseHandle(h); }
 #define cancel_thread terminate_thread
 
-#elif defined(_LINUX) // Linux
+#elif defined(_LINUX)|| defined(ESP_PLATFORM) // Linux ESP32
 
 typedef pthread_t tXcpThread;
 #define create_thread(h,t) pthread_create(h, NULL, t, NULL);
@@ -88,7 +90,7 @@ typedef pthread_t tXcpThread;
 //-------------------------------------------------------------------------------
 // Platform independant socket functions
 
-#ifdef _LINUX // Linux sockets
+#if defined(_LINUX)|| defined(ESP_PLATFORM) // Linux sockets
 
 #define SOCKET int
 #define INVALID_SOCKET (-1)
@@ -133,7 +135,11 @@ typedef pthread_t tXcpThread;
 #define SOCKET_TIMESTAMP_SOFTWARE_SYNC 1
 
 extern BOOL socketStartup();
+#ifdef ESP_PLATFORM
+extern int socketGetLastError();
+#else
 extern int32_t socketGetLastError();
+#endif
 extern void socketCleanup();
 extern BOOL socketOpen(SOCKET* sp, BOOL useTCP, BOOL nonBlocking, BOOL reuseaddr, BOOL timestamps);
 extern BOOL socketBind(SOCKET sock, uint8_t* addr, uint16_t port);
